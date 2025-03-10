@@ -9,26 +9,47 @@
 <iframe id="dynamicIframe" width="100%" height="500px" frameborder="0"></iframe>
 
 <script type="text/javascript">
-  // 假设这些是您需要替换的上下文参数
-  var contextParams = {
-      organizationId: '675aa2ee87b93e3c5f137e6f', // 企业 ID
-      projectId: '', // 如果有项目ID，请填在这里
-      objectId: '67c9544fc865f8b6723156f7', // 任务 ID
-      customFieldId: '', // 如果有字段ID，请填在这里
-      instanceId: '', // 如果有第一个字段值ID，请填在这里
-      userId: '5955b931cbb39776767293bc', // 用户 ID
-      templateId: '' // 如果有模版ID，请填在这里
-  };
+  // 引入 SDK 和 API
+  import { AppSDK } from 'tb-apps-sdk';
+  import { hostAPI } from 'tb-apps-sdk/api/plugin';
+  const tbSDK = AppSDK.fork(hostAPI);
 
-  // 构建URL
-  var url = 'https://apps.teambition.com/work-time-client/add/actual?' +
-            '_organizationId=' + encodeURIComponent(contextParams.organizationId) +
-            '&taskId=' + encodeURIComponent(contextParams.objectId) +
-            '&_userId=' + encodeURIComponent(contextParams.userId) +
-            '&from=task'; // 注意：这里仅包含了您提供的URL中的参数
+  // 初始化 SDK
+  tbSDK.init().then(() => {
+    console.log('SDK 初始化成功');
 
-  // 设置iFrame的src属性
-  document.getElementById('dynamicIframe').setAttribute('src', url);
+    // 假设这些是您需要替换的上下文参数
+    var contextParams = {
+        organizationId: '675aa2ee87b93e3c5f137e6f', // 企业 ID
+        projectId: '', // 如果有项目ID，请填在这里
+        objectId: '67c9544fc865f8b6723156f7', // 任务 ID
+        customFieldId: '', // 如果有字段ID，请填在这里
+        instanceId: '', // 如果有第一个字段值ID，请填在这里
+        userId: '5955b931cbb39776767293bc', // 用户 ID
+        templateId: '' // 如果有模版ID，请填在这里
+    };
+
+    // 构建URL
+    var url = 'https://apps.teambition.com/work-time-client/add/actual?' +
+              '_organizationId=' + encodeURIComponent(contextParams.organizationId) +
+              '&taskId=' + encodeURIComponent(contextParams.objectId) +
+              '&_userId=' + encodeURIComponent(contextParams.userId) +
+              '&from=task'; // 注意：这里仅包含了您提供的URL中的参数
+
+    // 设置iFrame的src属性
+    var iframe = document.getElementById('dynamicIframe');
+    iframe.setAttribute('src', url);
+
+    // 监听iFrame的unload事件
+    iframe.onload = function() {
+      iframe.contentWindow.onunload = function() {
+        // 当iFrame卸载时，关闭当前弹窗
+        tbSDK.close();
+      };
+    };
+  }).catch((error) => {
+    console.error('SDK 初始化失败:', error);
+  });
 </script>
 
 </body>
