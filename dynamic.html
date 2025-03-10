@@ -1,55 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dynamic iFrame</title>
+  <title>Redirect to Target Page</title>
+  <!-- 引入 Teambition JS API -->
+<!--  <script src="https://g.alicdn.com/code/npm/@alife/teambition-jsapi/0.0.14/tb-jsapi.umd.js"></script>-->
 </head>
 <body>
 
-<!-- 定义iFrame -->
-<iframe id="dynamicIframe" width="100%" height="500px" frameborder="0"></iframe>
-
 <script type="text/javascript">
-  // 引入 SDK 和 API
-  import { AppSDK } from 'tb-apps-sdk';
-  import { hostAPI } from 'tb-apps-sdk/api/plugin';
-  const tbSDK = AppSDK.fork(hostAPI);
+  // 假设这些是您需要替换的上下文参数
+  var contextParams = {
+      organizationId: '675aa2ee87b93e3c5f137e6f', // 企业 ID
+      projectId: '', // 如果有项目ID，请填在这里
+      objectId: '67c9544fc865f8b6723156f7', // 任务 ID
+      customFieldId: '', // 如果有字段ID，请填在这里
+      instanceId: '', // 如果有第一个字段值ID，请填在这里
+      userId: '5955b931cbb39776767293bc', // 用户 ID
+      templateId: '' // 如果有模版ID，请填在这里
+  };
 
-  // 初始化 SDK
-  tbSDK.init().then(() => {
-    console.log('SDK 初始化成功');
+  // 构建URL
+  var url = 'https://apps.teambition.com/work-time-client/add/actual?' +
+            '_organizationId=' + encodeURIComponent(contextParams.organizationId) +
+            '&taskId=' + encodeURIComponent(contextParams.objectId) +
+            '&_userId=' + encodeURIComponent(contextParams.userId) +
+            '&from=task'; // 注意：这里仅包含了您提供的URL中的参数
 
-    // 假设这些是您需要替换的上下文参数
-    var contextParams = {
-        organizationId: '675aa2ee87b93e3c5f137e6f', // 企业 ID
-        projectId: '', // 如果有项目ID，请填在这里
-        objectId: '67c9544fc865f8b6723156f7', // 任务 ID
-        customFieldId: '', // 如果有字段ID，请填在这里
-        instanceId: '', // 如果有第一个字段值ID，请填在这里
-        userId: '5955b931cbb39776767293bc', // 用户 ID
-        templateId: '' // 如果有模版ID，请填在这里
-    };
+<!--  // 确保 Teambition JS API 已加载-->
+<!--  window.tb.ready(function() {-->
+<!--    console.log('Teambition JS API 初始化成功');-->
 
-    // 构建URL
-    var url = 'https://apps.teambition.com/work-time-client/add/actual?' +
-              '_organizationId=' + encodeURIComponent(contextParams.organizationId) +
-              '&taskId=' + encodeURIComponent(contextParams.objectId) +
-              '&_userId=' + encodeURIComponent(contextParams.userId) +
-              '&from=task'; // 注意：这里仅包含了您提供的URL中的参数
+<!--    // 自动关闭弹窗并重定向到目标页面-->
+<!--    window.tb.closeModal().then(() => {-->
+<!--      console.log('弹窗已关闭，即将重定向到目标页面');-->
+<!--      window.location.href = url;-->
+<!--    }).catch((error) => {-->
+<!--      console.error('关闭弹窗失败:', error);-->
+<!--      // 即使关闭弹窗失败，仍然尝试重定向-->
+<!--      window.location.href = url;-->
+<!--    });-->
+<!--  });-->
 
-    // 设置iFrame的src属性
-    var iframe = document.getElementById('dynamicIframe');
-    iframe.setAttribute('src', url);
-
-    // 监听iFrame的unload事件
-    iframe.onload = function() {
-      iframe.contentWindow.onunload = function() {
-        // 当iFrame卸载时，关闭当前弹窗
-        tbSDK.close();
-      };
-    };
-  }).catch((error) => {
-    console.error('SDK 初始化失败:', error);
-  });
+  // 如果Teambition JS API初始化失败或未加载，直接重定向
+  //if (!window.tb || !window.tb.ready) {
+    console.warn('Teambition JS API 未加载或初始化失败，直接重定向');
+    window.location.href = url;
+ // }
 </script>
 
 </body>
