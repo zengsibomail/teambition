@@ -1,57 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Redirect to Target Page</title>
-  <!-- 引入 Teambition JS API -->
-  <script src="https://g.alicdn.com/code/npm/@alife/teambition-jsapi/0.0.14/tb-jsapi.umd.js"></script>
+    <title>Redirect to Target Page</title>
+    <!-- 引入 Teambition JS API -->
+    <script src="https://g.alicdn.com/code/npm/@alife/teambition-jsapi/0.0.14/tb-jsapi.umd.js"></script>
 </head>
 <body>
 
 <script type="text/javascript">
-  // 假设这些是您需要替换的上下文参数
-  var contextParams = {
-      organizationId: '675aa2ee87b93e3c5f137e6f', // 企业 ID
-      projectId: '', // 如果有项目ID，请填在这里
-      objectId: '67c9544fc865f8b6723156f7', // 任务 ID
-      customFieldId: '', // 如果有字段ID，请填在这里
-      instanceId: '', // 如果有第一个字段值ID，请填在这里
-      userId: '5955b931cbb39776767293bc', // 用户 ID
-      templateId: '' // 如果有模版ID，请填在这里
-  };
+    // 假设这些是您需要替换的上下文参数
+    var contextParams = {
+        organizationId: '675aa2ee87b93e3c5f137e6f', // 企业 ID
+        projectId: '', // 如果有项目ID，请填在这里
+        objectId: '67c9544fc865f8b6723156f7', // 任务 ID
+        customFieldId: '', // 如果有字段ID，请填在这里
+        instanceId: '', // 如果有第一个字段值ID，请填在这里
+        userId: '5955b931cbb39776767293bc', // 用户 ID
+        templateId: '' // 如果有模版ID，请填在这里
+    };
 
-  // 构建URL
-  var url = 'https://apps.teambition.com/work-time-client/add/actual?' +
-            '_organizationId=' + encodeURIComponent(contextParams.organizationId) +
-            '&taskId=' + encodeURIComponent(contextParams.objectId) +
-            '&_userId=' + encodeURIComponent(contextParams.userId) +
-            '&from=task'; // 注意：这里仅包含了您提供的URL中的参数
+    // 构建URL
+    var url = 'https://apps.teambition.com/work-time-client/add/actual?' +
+              '_organizationId=' + encodeURIComponent(contextParams.organizationId) +
+              '&taskId=' + encodeURIComponent(contextParams.objectId) +
+              '&_userId=' + encodeURIComponent(contextParams.userId) +
+              '&from=task'; // 注意：这里仅包含了您提供的URL中的参数
 
-  // 确保 Teambition JS API 已加载
-  if (window.tb && typeof window.tb.ready === 'function') {
-    console.log('Teambition JS API 已加载，等待初始化');
-<!--    window.tb.ready(function() {-->
-<!--      console.log('Teambition JS API 初始化成功');-->
+    // 确保 Teambition JS API 已加载
+    if (window.tb && typeof window.tb.ready === 'function') {
+    console.log(tb);
+      console.log('Teambition JS API 已加载，等待初始化');
+      tb.ready(function() {
+        console.log('Teambition JS API 初始化成功');
 
-      // 自动关闭弹窗并重定向到目标页面
-      window.tb.closeModal().then(() => {
-        console.log('弹窗已关闭，即将重定向到目标页面');
-     //   window.location.href = url;
-      }).catch((error) => {
-        console.error('关闭弹窗失败:', error);
-        // 即使关闭弹窗失败，仍然尝试重定向
-    //    window.location.href = url;
+        // 自动关闭弹窗并重定向到目标页面
+        tb.closeModal().then(() => {
+          console.log('弹窗已关闭，即将重定向到目标页面');
+       //   window.location.href = url;
+        }).catch((error) => {
+          console.error('关闭弹窗失败:', error);
+          // 即使关闭弹窗失败，仍然尝试重定向
+      //    window.location.href = url;
+        });
       });
-   // });
 
-    // 设置一个超时时间，以防Teambition JS API的ready回调未被调用
-    setTimeout(function() {
-      console.warn('Teambition JS API 的 ready 回调未被调用，直接重定向');
-     // window.location.href = url;
-    }, 5000); // 5秒超时
-  } else {
-    console.warn('Teambition JS API 未加载或初始化失败，直接重定向');
- //   window.location.href = url;
-  }
+      // 设置一个超时时间，以防Teambition JS API的ready回调未被调用
+      setTimeout(function() {
+        console.warn('Teambition JS API 的 ready 回调未被调用，直接重定向');
+       // window.location.href = url;
+      }, 5000); // 5秒超时
+    } else {
+      console.warn('Teambition JS API 未加载或初始化失败，直接重定向');
+   //   window.location.href = url;
+    }
 </script>
 
 </body>
