@@ -3,7 +3,7 @@
 <head>
   <title>Redirect to Target Page</title>
   <!-- 引入 Teambition JS API -->
-<!--  <script src="https://g.alicdn.com/code/npm/@alife/teambition-jsapi/0.0.14/tb-jsapi.umd.js"></script>-->
+  <script src="https://g.alicdn.com/code/npm/@alife/teambition-jsapi/0.0.14/tb-jsapi.umd.js"></script>
 </head>
 <body>
 
@@ -26,26 +26,32 @@
             '&_userId=' + encodeURIComponent(contextParams.userId) +
             '&from=task'; // 注意：这里仅包含了您提供的URL中的参数
 
-<!--  // 确保 Teambition JS API 已加载-->
-<!--  window.tb.ready(function() {-->
-<!--    console.log('Teambition JS API 初始化成功');-->
+  // 确保 Teambition JS API 已加载
+  if (window.tb && typeof window.tb.ready === 'function') {
+    console.log('Teambition JS API 已加载，等待初始化');
+<!--    window.tb.ready(function() {-->
+<!--      console.log('Teambition JS API 初始化成功');-->
 
-<!--    // 自动关闭弹窗并重定向到目标页面-->
-<!--    window.tb.closeModal().then(() => {-->
-<!--      console.log('弹窗已关闭，即将重定向到目标页面');-->
-<!--      window.location.href = url;-->
-<!--    }).catch((error) => {-->
-<!--      console.error('关闭弹窗失败:', error);-->
-<!--      // 即使关闭弹窗失败，仍然尝试重定向-->
-<!--      window.location.href = url;-->
-<!--    });-->
-<!--  });-->
+      // 自动关闭弹窗并重定向到目标页面
+      window.tb.closeModal().then(() => {
+        console.log('弹窗已关闭，即将重定向到目标页面');
+     //   window.location.href = url;
+      }).catch((error) => {
+        console.error('关闭弹窗失败:', error);
+        // 即使关闭弹窗失败，仍然尝试重定向
+    //    window.location.href = url;
+      });
+   // });
 
-  // 如果Teambition JS API初始化失败或未加载，直接重定向
-  //if (!window.tb || !window.tb.ready) {
+    // 设置一个超时时间，以防Teambition JS API的ready回调未被调用
+    setTimeout(function() {
+      console.warn('Teambition JS API 的 ready 回调未被调用，直接重定向');
+     // window.location.href = url;
+    }, 5000); // 5秒超时
+  } else {
     console.warn('Teambition JS API 未加载或初始化失败，直接重定向');
-    window.location.href = url;
- // }
+ //   window.location.href = url;
+  }
 </script>
 
 </body>
